@@ -1,35 +1,57 @@
-html {
-  text-align: center;
-  font-family: Monaco;
+body {
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  background: white;
+  background: url(../images/pexels-steve-johnson-1509534.jpg);
+  background-size: cover;
+}
+canvas {
+  border: 30px solid #5e259498;
+  border-radius: 10px;
+  /* Set the width and height to half the actual size so it doesn't look pixelated */
+  width: 800px;
+  height: 500px;
+  background: white;
+}
+canvas.shake {
+  animation: shake 0.5s linear 1;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 
-.right {
-  float: right;
+.buttons {
+  display: grid;
+  justify-items: center;
 }
 
-.left {
-  display: inline-block;
+button {
+  margin-top: 10px;
+  width: 40%;
+  padding: 20px;
+  background-color: rgba(135, 207, 235, 0.726);
+  border: none;
 }
 
-.square {
-  background-color: white;
-  border: 1px solid black;
+button:hover {
+  background-color: whitesmoke;
+  color: steelblue;
 }
-
-.color {
-  background-color: gray;
-  border: 1px solid black;
-}
-
-.gridContainer {
-  margin-top: 25px;
-  margin-right: 40px;
-  display: inline-grid;
-  grid-template-columns: repeat(16, 2fr);
-  grid-template-rows: repeat(16, 2fr);
-  border: 5px solid black;
-  border-radius: 5px;
-  height: 575px;
-  width: 575px;
-}
-

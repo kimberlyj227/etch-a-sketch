@@ -1,46 +1,74 @@
-const grid = document.querySelector(".gridContainer");
-const userInput = document.getElementById("quantity");
-const resetButton = document.querySelector(".reset");
+// select elements on the page
+const canvas = document.querySelector("#etch-a-sketch");
 
-createGrid = () => {
-  for (let i = 0; i < 256; i++) {
-    const div = document.createElement("div");
-    div.classList.add("square");
-    grid.appendChild(div);
+const ctx = canvas.getContext("2d");
+const shake = document.querySelector(".shake");
+const moveAmount = 10;
+let hue = 0;
+ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
+
+// set up canvas for drawing
+const {
+  width,
+  height
+} = canvas;
+let x = Math.floor(Math.random() * width);
+let y = Math.floor(Math.random() * width);
+ctx.linejoin = "round";
+ctx.lineCap = "round";
+ctx.lineWidth = 10;
+ctx.beginPath();
+ctx.moveTo(x, y);
+ctx.lineTo(x, y);
+ctx.stroke();
+// write draw function
+const draw = ({
+  key
+}) => {
+  hue += 10;
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  switch (key) {
+    default:
+      break;
+    case "ArrowUp":
+      y -= moveAmount;
+      break;
+    case "ArrowDown":
+      y += moveAmount;
+      break;
+    case "ArrowLeft":
+      x -= moveAmount;
+      break;
+    case "ArrowRight":
+      x += moveAmount;
+      break;
   }
-};
+  ctx.lineTo(x, y);
+  ctx.stroke();
 
-updateGrid = () => {
-  grid.innerHTML = "";
-  grid.style.setProperty(
-    "grid-template-columns",
-    `repeat(${userInput.value}, 2fr)`
-  );
-  grid.style.setProperty(
-    "grid-template-rows",
-    `repeat(${userInput.value}, 2fr)`
-  );
-  for (let i = 0; i < userInput.value * userInput.value; i++) {
-    const div = document.createElement("div");
-    div.classList.add("square");
-    grid.appendChild(div);
+}
+// write handler for arrow keys
+const handleKey = (event) => {
+  if (event.key.includes("Arrow")) {
+    event.preventDefault();
+    draw({
+      key: event.key
+    });
   }
-  console.log(userInput.value);
-};
+}
+// clear shake function
+const clearCanvas = () => {
+  canvas.classList.add("shake");
+  ctx.clearRect(0, 0, width, height);
+  canvas.addEventListener("animationend", () => {
+    canvas.classList.remove("shake");
+  }, {once: true});
+}
 
-const square = document.querySelector("div");
-square.addEventListener("mouseover", function(event) {
-  event.target.classList.replace("square", "color");
-});
+shake.addEventListener("click", clearCanvas)
 
-userInput.addEventListener("change", updateGrid);
-
-resetButton.addEventListener("click", function() {
-  grid.innerHTML = "";
-  userInput.value = "";
-  grid.style.setProperty("grid-template-columns", `repeat(16, 2fr)`);
-  grid.style.setProperty("grid-template-rows", `repeat(16, 2fr)`);
-  createGrid();
-});
-
-createGrid();
+// listen for arrow keys
+window.addEventListener("keydown", handleKey);
